@@ -1,0 +1,168 @@
+{
+  "theme": "LIGHT",
+  "archetype": "3 (Pastel & Soft) + Glam E-commerce",
+  "brand": {
+    "name": "BrowsEMS",
+    "logo_url": "https://customer-assets.emergentagent.com/job_f6f9a757-ba2b-4ccc-a0f3-159582be4ba3/artifacts/4dkdw2vp_browsems-logo.png",
+    "tone": "Warm, encouraging, playful, feminine"
+  },
+  "colors": {
+    "primary": "hsl(340, 50%, 85%)",
+    "primary_foreground": "hsl(340, 40%, 20%)",
+    "background": "hsl(40, 33%, 98%)",
+    "foreground": "hsl(0, 0%, 15%)",
+    "card": "hsl(40, 30%, 96%)",
+    "card_foreground": "hsl(0, 0%, 15%)",
+    "border": "hsl(340, 30%, 90%)",
+    "accent": "hsl(340, 60%, 75%)",
+    "accent_foreground": "hsl(0, 0%, 100%)",
+    "muted": "hsl(40, 20%, 90%)",
+    "muted_foreground": "hsl(0, 0%, 40%)"
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Dancing Script",
+      "body": "DM Sans",
+      "google_fonts_url": "https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap"
+    },
+    "rules": {
+      "h1": "font-heading text-5xl sm:text-6xl tracking-tight text-white drop-shadow-md",
+      "h2": "font-heading text-4xl sm:text-5xl tracking-tight text-primary-foreground",
+      "h3": "font-body text-xl sm:text-2xl font-medium",
+      "body": "font-body text-base text-foreground",
+      "cursive_accents": "font-heading text-accent text-3xl md:text-5xl -rotate-2 inline-block",
+      "emoji": "inline-block ml-2 text-2xl"
+    }
+  },
+  "spacing": {
+    "section_y": "py-16 md:py-24",
+    "container": "container mx-auto px-4 sm:px-6 lg:px-8",
+    "gap_grid": "gap-6 md:gap-8"
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-accent text-white hover:bg-primary-foreground transition-colors px-6 py-3 rounded-full font-body font-medium flex items-center justify-center group",
+      "pattern": "Add to Bag \u2500"
+    },
+    "cards": {
+      "product": "bg-card rounded-2xl p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow",
+      "category": "bg-card rounded-3xl p-6 aspect-square flex flex-col items-center justify-center text-center cursor-pointer hover:bg-primary/20 transition-colors"
+    },
+    "inputs": {
+      "default": "border border-border bg-white rounded-full px-4 py-3 focus:ring-2 focus:ring-accent outline-none font-body w-full"
+    }
+  },
+  "layout": {
+    "nav": {
+      "style": "sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border py-4",
+      "elements": "Logo left, Links center (hidden on mobile), EN/ES toggle + Mini-cart right"
+    },
+    "hero": {
+      "type": "scroll-scrubbing-video",
+      "media_url": "https://vids.videohosting.space/Kling%203_0%20Pro%20-%20Two%20glamorous%20cartoon%20princesses%20_one%20Black%20girl_%20one%20White%20girl_%20with%20flawless%20micr.mp4",
+      "height": "h-[300vh]",
+      "video_container": "sticky top-0 h-[100vh] w-full overflow-hidden bg-black",
+      "overlay": "absolute inset-0 bg-black/40",
+      "text_states": [
+        { "progress": [0, 0.25], "text": "Wake up flawless.", "emoji": "\u2728" },
+        { "progress": [0.35, 0.60], "text": "Brows, lips, lashes \u2014 sculpted.", "emoji": "\ud83d\udc8b" },
+        { "progress": [0.70, 1.0], "text": "BrowsEMS \u2014 your beauty, crowned.", "emoji": "\ud83d\udc51" }
+      ],
+      "fallbacks": {
+        "mobile": "autoPlay loop muted playsInline (disable scroll-scrubbing for performance if needed)",
+        "reduced_motion": "poster image with static text"
+      }
+    },
+    "sections": [
+      {
+        "name": "Promo Banner",
+        "style": "bg-accent text-white text-sm text-center py-2 font-medium font-body",
+        "content": "Free International Shipping over 440 AED"
+      },
+      {
+        "name": "Best Sellers",
+        "layout": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",
+        "heading": "Our Best Sellers \ud83d\udc95",
+        "products": [
+          {
+            "name": "Velvet Lip Lacquer",
+            "variant": "Dusty Rose",
+            "price": "AED 85",
+            "image": "https://images.unsplash.com/photo-1773372238349-41899694df31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwzfHxtYWtldXAlMjBwcm9kdWN0JTIwcGluayUyMGFlc3RoZXRpY3xlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85"
+          },
+          {
+            "name": "Crown Brow Pomade",
+            "variant": "Brunette",
+            "price": "AED 95",
+            "image": "https://images.pexels.com/photos/25355739/pexels-photo-25355739.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+          },
+          {
+            "name": "Diamond Kiss Liner",
+            "variant": "Classic Black",
+            "price": "AED 75",
+            "image": "https://images.unsplash.com/photo-1630417591406-6584f2d324bd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwxfHxtYWtldXAlMjBwcm9kdWN0JTIwcGluayUyMGFlc3RoZXRpY3xlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85"
+          },
+          {
+            "name": "Glam Eyes Palette",
+            "variant": "Sunset Dreams",
+            "price": "AED 180",
+            "image": "https://images.pexels.com/photos/34567763/pexels-photo-34567763.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+          }
+        ]
+      },
+      {
+        "name": "Tagline Ribbon",
+        "style": "bg-primary/30 py-12 text-center",
+        "text": "Feel-good products to celebrate all kinds of beauty & share positive energy \u2728"
+      },
+      {
+        "name": "Shop by Category",
+        "layout": "grid grid-cols-2 md:grid-cols-4 gap-4",
+        "tiles": ["Face", "Lips", "Eyes", "Brows"]
+      },
+      {
+        "name": "Featured Banner 1",
+        "layout": "flex flex-col md:flex-row items-center gap-8 bg-card rounded-3xl p-8",
+        "image": "https://images.pexels.com/photos/7866530/pexels-photo-7866530.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "headline": "Soft & Hydrated Lips \ud83d\udc44",
+        "cursive_overlay": true
+      },
+      {
+        "name": "Featured Banner 2",
+        "layout": "flex flex-col md:flex-row-reverse items-center gap-8 bg-card rounded-3xl p-8 mt-8",
+        "image": "https://images.unsplash.com/photo-1761498443962-1f00eed12137?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwzfHxnbGFtb3JvdXMlMjBiZWF1dHklMjBtYWtldXAlMjBtb2RlbHxlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85",
+        "headline": "LASH CHAMPION MASCARA \ud83e\udd0d",
+        "cursive_overlay": true
+      },
+      {
+        "name": "Blog / Stories",
+        "layout": "grid grid-cols-1 md:grid-cols-3 gap-6",
+        "heading": "Our Blog"
+      },
+      {
+        "name": "Instagram Feed",
+        "layout": "grid grid-cols-2 md:grid-cols-6 gap-0",
+        "images": [
+          "https://images.unsplash.com/photo-1767288533191-cc2c72bad9c9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwyfHxhZXN0aGV0aWMlMjBtYWtldXAlMjB2YW5pdHklMjBza2luY2FyZXxlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85",
+          "https://images.unsplash.com/photo-1767360963892-3353defd6584?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxhZXN0aGV0aWMlMjBtYWtldXAlMjB2YW5pdHklMjBza2luY2FyZXxlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85",
+          "https://images.unsplash.com/photo-1766242281507-dca096a98464?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwzfHxhZXN0aGV0aWMlMjBtYWtldXAlMjB2YW5pdHklMjBza2luY2FyZXxlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85",
+          "https://images.unsplash.com/photo-1615793685200-5802ff8bbea7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHw0fHxhZXN0aGV0aWMlMjBtYWtldXAlMjB2YW5pdHklMjBza2luY2FyZXxlbnwwfHx8fDE3NzkyNzUyMjV8MA&ixlib=rb-4.1.0&q=85",
+          "https://images.pexels.com/photos/5566043/pexels-photo-5566043.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+          "https://images.pexels.com/photos/7773349/pexels-photo-7773349.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        ]
+      },
+      {
+        "name": "Forms",
+        "description": "Newsletter, Contact, and Booking Form (in-store glam appointments) - POST to backend."
+      }
+    ]
+  },
+  "instructions_to_main_agent": {
+    "1": "Use the exact provided color HSL values in tailwind.config.js and CSS variables.",
+    "2": "Import Google Fonts (Dancing Script & DM Sans). Set Dancing Script for '.font-heading' and DM Sans for '.font-body'.",
+    "3": "Hero Video Scrubbing: Wrap the hero section in a `h-[300vh]` container. Inside, use a `sticky top-0 h-screen` container. Use framer-motion `useScroll` to map `scrollYProgress` to `videoRef.current.currentTime`. IMPORTANT: For mobile users or `prefers-reduced-motion`, gracefully degrade to a muted auto-playing looping video without scrubbing.",
+    "4": "Ensure `data-testid` attributes are present on all buttons, form inputs, and interactive components.",
+    "5": "Replicate Siella's aesthetic exactly: Em-dash button pattern ('Add to Bag \u2500 AED XX'), soft cream cards on pink backgrounds, and emoji embellishments.",
+    "6": "Use neutral brand 'BrowsEMS' but implement it using the provided neon logo in the header."
+  }
+}
