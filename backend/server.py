@@ -1,12 +1,12 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
@@ -14,59 +14,132 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
 app = FastAPI()
-
-# Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
+def utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+# ---------- Models ----------
+class NewsletterSubscriber(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    email: EmailStr
+    locale: Optional[str] = "en"
+    created_at: str = Field(default_factory=utc_now_iso)
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
+class NewsletterCreate(BaseModel):
+    email: EmailStr
+    locale: Optional[str] = "en"
+
+
+class ContactMessage(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    subject: Optional[str] = None
+    message: str
+    locale: Optional[str] = "en"
+    created_at: str = Field(default_factory=utc_now_iso)
+
+
+class ContactCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    subject: Optional[str] = Field(default=None, max_length=200)
+    message: str = Field(min_length=1, max_length=3000)
+    locale: Optional[str] = "en"
+
+
+class BookingRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    phone: Optional[str] = None
+    service: str
+    preferred_date: str  # YYYY-MM-DD
+    preferred_time: Optional[str] = None  # HH:MM
+    notes: Optional[str] = None
+    locale: Optional[str] = "en"
+    created_at: str = Field(default_factory=utc_now_iso)
+
+
+class BookingCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    phone: Optional[str] = Field(default=None, max_length=40)
+    service: str = Field(min_length=1, max_length=120)
+    preferred_date: str = Field(min_length=8, max_length=20)
+    preferred_time: Optional[str] = Field(default=None, max_length=10)
+    notes: Optional[str] = Field(default=None, max_length=1000)
+    locale: Optional[str] = "en"
+
+
+# ---------- Routes ----------
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "BrowsEMS API"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/health")
+async def health():
+    return {"status": "ok", "service": "browsems-api", "ts": utc_now_iso()}
 
-# Include the router in the main app
+
+# Newsletter
+@api_router.post("/newsletter", response_model=NewsletterSubscriber)
+async def subscribe_newsletter(payload: NewsletterCreate):
+    existing = await db.newsletter_subscribers.find_one({"email": payload.email}, {"_id": 0})
+    if existing:
+        return NewsletterSubscriber(**existing)
+    sub = NewsletterSubscriber(**payload.model_dump())
+    await db.newsletter_subscribers.insert_one(sub.model_dump())
+    return sub
+
+
+@api_router.get("/newsletter", response_model=List[NewsletterSubscriber])
+async def list_newsletter():
+    items = await db.newsletter_subscribers.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return [NewsletterSubscriber(**i) for i in items]
+
+
+# Contact
+@api_router.post("/contact", response_model=ContactMessage)
+async def submit_contact(payload: ContactCreate):
+    msg = ContactMessage(**payload.model_dump())
+    await db.contact_messages.insert_one(msg.model_dump())
+    return msg
+
+
+@api_router.get("/contact", response_model=List[ContactMessage])
+async def list_contact():
+    items = await db.contact_messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return [ContactMessage(**i) for i in items]
+
+
+# Booking
+@api_router.post("/booking", response_model=BookingRequest)
+async def submit_booking(payload: BookingCreate):
+    booking = BookingRequest(**payload.model_dump())
+    await db.booking_requests.insert_one(booking.model_dump())
+    return booking
+
+
+@api_router.get("/booking", response_model=List[BookingRequest])
+async def list_bookings():
+    items = await db.booking_requests.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return [BookingRequest(**i) for i in items]
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -77,12 +150,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
