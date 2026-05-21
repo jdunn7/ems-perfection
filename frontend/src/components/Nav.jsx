@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ShoppingBag, Menu, X, Search } from "lucide-react";
+import { Calendar, Menu, X } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { BRAND_LOGO_URL } from "@/data/content";
 
@@ -16,10 +16,11 @@ const Nav = () => {
     }, []);
 
     const navLinks = [
-        { key: "shop", href: "#best-sellers", label: t.nav.shop },
-        { key: "collections", href: "#categories", label: t.nav.collections },
-        { key: "stories", href: "#stories", label: t.nav.stories },
-        { key: "book", href: "#booking", label: t.nav.book },
+        { key: "services", href: "/#services", label: t.nav.services },
+        { key: "artists", href: "/#artists", label: t.nav.artists },
+        { key: "gallery", href: "/#gallery", label: t.nav.gallery },
+        { key: "process", href: "/#process", label: t.nav.process },
+        { key: "faq", href: "/#faq", label: t.nav.faq },
     ];
 
     return (
@@ -27,13 +28,12 @@ const Nav = () => {
             data-testid="site-nav"
             className={`sticky top-0 z-50 transition-all duration-300 ${
                 scrolled
-                    ? "bg-background/85 backdrop-blur-md border-b border-border/70 shadow-[0_1px_0_rgba(0,0,0,0.02)]"
+                    ? "bg-background/85 backdrop-blur-md border-b border-border/70"
                     : "bg-background/40 backdrop-blur-[2px] border-b border-transparent"
             }`}
         >
             <div className="container-x flex items-center justify-between h-[68px]">
-                {/* Logo */}
-                <a href="#top" className="flex items-center gap-2" data-testid="nav-logo">
+                <a href="/" className="flex items-center gap-2" data-testid="nav-logo">
                     <span className="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-foreground overflow-hidden ring-1 ring-foreground/30">
                         <img
                             src={BRAND_LOGO_URL}
@@ -47,23 +47,20 @@ const Nav = () => {
                     </span>
                 </a>
 
-                {/* Desktop nav */}
-                <nav className="hidden lg:flex items-center gap-8">
+                <nav className="hidden lg:flex items-center gap-7">
                     {navLinks.map((l) => (
                         <a
                             key={l.key}
                             href={l.href}
                             data-testid={`nav-link-${l.key}`}
-                            className="font-body text-sm text-foreground/80 hover:text-accent transition-colors tracking-wide uppercase"
+                            className="font-body text-[12px] text-foreground/80 hover:text-accent transition-colors tracking-[0.18em] uppercase"
                         >
                             {l.label}
                         </a>
                     ))}
                 </nav>
 
-                {/* Right actions */}
                 <div className="flex items-center gap-2 sm:gap-3">
-                    {/* Lang toggle */}
                     <div
                         className="hidden sm:flex items-center rounded-full border border-border bg-white/70 p-0.5"
                         data-testid="lang-toggle"
@@ -84,26 +81,15 @@ const Nav = () => {
                         ))}
                     </div>
 
-                    <button
-                        aria-label="Search"
-                        data-testid="nav-search-btn"
-                        className="p-2 rounded-full hover:bg-card transition-colors hidden sm:inline-flex"
+                    <a
+                        href="/#booking"
+                        data-testid="nav-book-cta"
+                        className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground text-background font-body text-sm font-medium hover:bg-accent transition-colors"
                     >
-                        <Search size={18} />
-                    </button>
+                        <Calendar size={14} />
+                        {t.nav.book}
+                    </a>
 
-                    <button
-                        aria-label={t.nav.cart}
-                        data-testid="nav-cart-btn"
-                        className="relative p-2 rounded-full hover:bg-card transition-colors"
-                    >
-                        <ShoppingBag size={18} />
-                        <span className="absolute -top-0.5 -right-0.5 bg-accent text-[10px] text-white w-4 h-4 rounded-full flex items-center justify-center font-medium">
-                            0
-                        </span>
-                    </button>
-
-                    {/* Mobile menu toggle */}
                     <button
                         aria-label="Menu"
                         data-testid="nav-mobile-toggle"
@@ -115,7 +101,6 @@ const Nav = () => {
                 </div>
             </div>
 
-            {/* Mobile dropdown */}
             {mobileOpen && (
                 <div
                     data-testid="mobile-menu"
@@ -133,6 +118,15 @@ const Nav = () => {
                                 {l.label}
                             </a>
                         ))}
+                        <a
+                            href="/#booking"
+                            onClick={() => setMobileOpen(false)}
+                            className="mt-2 px-4 py-3 rounded-2xl bg-foreground text-background font-body text-base font-medium inline-flex items-center gap-2 justify-center"
+                            data-testid="mobile-book-cta"
+                        >
+                            <Calendar size={16} />
+                            {t.nav.book}
+                        </a>
                         <div className="flex items-center gap-2 pt-2">
                             {supportedLocales.map((l) => (
                                 <button

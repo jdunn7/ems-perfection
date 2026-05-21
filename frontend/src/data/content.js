@@ -1,125 +1,116 @@
-// Static placeholder product / story / instagram data shared across locales (price + images locale-agnostic).
-// Product names exist in both EN and ES.
-
-export const HERO_VIDEO_URL =
-    "https://vids.videohosting.space/Kling%203_0%20Pro%20-%20Two%20glamorous%20cartoon%20princesses%20_one%20Black%20girl_%20one%20White%20girl_%20with%20flawless%20micr.mp4";
-
-export const HERO_POSTER_URL =
-    "https://images.unsplash.com/photo-1761498443962-1f00eed12137?crop=entropy&cs=srgb&fm=jpg&q=85&w=1920";
+// Static content: brand assets, master artists, before/after pairs, testimonials.
+// Service catalog comes from backend (GET /api/services) so prices/deposits stay server-authoritative.
 
 export const BRAND_LOGO_URL =
     "https://customer-assets.emergentagent.com/job_f6f9a757-ba2b-4ccc-a0f3-159582be4ba3/artifacts/4dkdw2vp_browsems-logo.png";
 
-export const products = [
+// Backend proxies the user-supplied hero video. The actual src is constructed at runtime
+// in ScrollVideoHero from REACT_APP_BACKEND_URL.
+export const HERO_VIDEO_PATH = "/api/hero-video";
+
+export const HERO_POSTER_URL =
+    "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1920&q=80&auto=format&fit=crop";
+
+// Master artists ------------------------------------------------------------
+export const artists = [
     {
-        id: "p1",
-        slug: "velvet-lip-lacquer",
-        names: { en: "Velvet Lip Lacquer", es: "Lacado Labial Velvet" },
-        descs: {
-            en: "12h water & transfer-proof matte lipstick with featherlight feel.",
-            es: "Labial mate de 12h resistente al agua y al roce, con tacto pluma.",
+        key: "elena",
+        name: "Elena Marín",
+        title: { en: "Master Brow Artist · Founder", es: "Artista Máster · Fundadora" },
+        bio: {
+            en: "10+ years shaping brows. Phibrows-certified, with an obsession for golden-ratio mapping.",
+            es: "Más de 10 años dando forma a cejas. Certificada Phibrows, obsesionada con el mapeo áureo.",
         },
-        variants: { en: "Dusty Rose", es: "Rosa Polvo" },
-        price: "AED 90",
-        image: "https://images.unsplash.com/photo-1773372238349-41899694df31?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop",
+        signature: ["Microblading", "Combo Brows"],
+        instagram: "@elena.browsems",
     },
     {
-        id: "p2",
-        slug: "crown-brow-pomade",
-        names: { en: "Crown Brow Pomade", es: "Pomada de Cejas Crown" },
-        descs: {
-            en: "Sculpting brow pomade with a creamy 24h-wear formula.",
-            es: "Pomada esculpidora con fórmula cremosa de 24h de duración.",
+        key: "marcus",
+        name: "Marcus Quintero",
+        title: { en: "Senior Pigment Artist", es: "Artista Pigmentista Senior" },
+        bio: {
+            en: "Specializes in microshading and lip blush. Trained in São Paulo, certified in PMU since 2017.",
+            es: "Especialista en microshading y lip blush. Formado en São Paulo, certificado en PMU desde 2017.",
         },
-        variants: { en: "Brunette", es: "Castaño" },
-        price: "AED 95",
-        image: "https://images.pexels.com/photos/25355739/pexels-photo-25355739.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=900",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=80&auto=format&fit=crop",
+        signature: ["Microshading", "Lip Blush"],
+        instagram: "@marcus.browsems",
     },
     {
-        id: "p3",
-        slug: "diamond-kiss-liner",
-        names: { en: "Diamond Kiss Liner", es: "Delineador Diamond Kiss" },
-        descs: {
-            en: "Transfer-proof lip liner with precision filling, lasts up to 16 hours.",
-            es: "Delineador labial resistente al roce y de precisión, dura hasta 16 horas.",
+        key: "sasha",
+        name: "Sasha Chen",
+        title: { en: "Resident Artist", es: "Artista Residente" },
+        bio: {
+            en: "Natural, soft-strokes specialist. Loves dialed-in symmetry and warm cool-toned pigments.",
+            es: "Especialista en trazos suaves y naturales. Le encanta la simetría precisa y pigmentos cálidos.",
         },
-        variants: { en: "Cashmere Rose", es: "Rosa Cashmere" },
-        price: "AED 80",
-        image: "https://images.unsplash.com/photo-1630417591406-6584f2d324bd?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
-    },
-    {
-        id: "p4",
-        slug: "glam-eyes-palette",
-        names: { en: "Glam Eyes Palette", es: "Paleta Glam Eyes" },
-        descs: {
-            en: "12 buttery shades from soft mattes to high-shine shimmers.",
-            es: "12 tonos sedosos, de mates suaves a brillos intensos.",
-        },
-        variants: { en: "Sunset Dreams", es: "Sueños de Atardecer" },
-        price: "AED 180",
-        image: "https://images.pexels.com/photos/34567763/pexels-photo-34567763.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=900",
+        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=900&q=80&auto=format&fit=crop",
+        signature: ["Microblading", "Touch-Up"],
+        instagram: "@sasha.browsems",
     },
 ];
 
-export const categories = [
+// Before / After gallery ----------------------------------------------------
+// Each pair is two real Unsplash brow/face photos. Captions identify the service.
+export const beforeAfter = [
     {
-        key: "face",
-        image: "https://images.unsplash.com/photo-1620912189865-cad4c43b53b5?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
+        id: "ba1",
+        before: "https://images.unsplash.com/photo-1571875257727-256c39da42af?w=900&q=80&auto=format&fit=crop",
+        after: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=900&q=80&auto=format&fit=crop",
+        service: { en: "Microblading", es: "Microblading" },
+        artist: "Elena",
     },
     {
-        key: "lips",
-        image: "https://images.unsplash.com/photo-1631214540242-3cd8c4b0b3b8?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
+        id: "ba2",
+        before: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&q=80&auto=format&fit=crop",
+        after: "https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=900&q=80&auto=format&fit=crop",
+        service: { en: "Microshading", es: "Microshading" },
+        artist: "Marcus",
     },
     {
-        key: "eyes",
-        image: "https://images.unsplash.com/photo-1583241800698-9c2e0c4a6c2a?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
+        id: "ba3",
+        before: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=900&q=80&auto=format&fit=crop",
+        after: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=900&q=80&auto=format&fit=crop",
+        service: { en: "Combo Brows", es: "Combo Brows" },
+        artist: "Sasha",
     },
     {
-        key: "brows",
-        image: "https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=900",
-    },
-];
-
-export const featuredImages = [
-    "https://images.pexels.com/photos/7866530/pexels-photo-7866530.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400",
-    "https://images.unsplash.com/photo-1761498443962-1f00eed12137?crop=entropy&cs=srgb&fm=jpg&w=1400&q=85",
-];
-
-export const stories = [
-    {
-        id: "s1",
-        image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85",
-        titles: {
-            en: "Bronze Goddess: Tips & Tricks",
-            es: "Diosa Bronce: Tips y Trucos",
-        },
-        tag: "Featured",
-    },
-    {
-        id: "s2",
-        image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85",
-        titles: {
-            en: "Cherry & Strawberry: Fruity tints for cheeks & lips",
-            es: "Cereza y Fresa: tintes frutales para mejillas y labios",
-        },
-        tag: "Featured",
-    },
-    {
-        id: "s3",
-        image: "https://images.unsplash.com/photo-1503236823255-94609f598e71?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85",
-        titles: {
-            en: "Summer Must-Haves for the Glow Season",
-            es: "Imprescindibles de verano para la temporada glow",
-        },
-        tag: "Featured",
+        id: "ba4",
+        before: "https://images.unsplash.com/photo-1503236823255-94609f598e71?w=900&q=80&auto=format&fit=crop",
+        after: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=900&q=80&auto=format&fit=crop",
+        service: { en: "Lip Blush", es: "Lip Blush" },
+        artist: "Marcus",
     },
 ];
 
-export const instagramImages = [
-    "https://images.unsplash.com/photo-1767288533191-cc2c72bad9c9?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
-    "https://images.unsplash.com/photo-1767360963892-3353defd6584?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
-    "https://images.unsplash.com/photo-1766242281507-dca096a98464?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
-    "https://images.unsplash.com/photo-1615793685200-5802ff8bbea7?crop=entropy&cs=srgb&fm=jpg&w=900&q=85",
-    "https://images.pexels.com/photos/5566043/pexels-photo-5566043.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=900",
-    "https://images.pexels.com/photos/7773349/pexels-photo-7773349.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=900",
+// Testimonials --------------------------------------------------------------
+export const testimonials = [
+    {
+        id: "t1",
+        name: "Carla R.",
+        rating: 5,
+        text: {
+            en: "I haven't touched a brow pencil in 14 months. Elena's mapping is a work of art.",
+            es: "No he tocado un lápiz de cejas en 14 meses. El mapeo de Elena es una obra de arte.",
+        },
+    },
+    {
+        id: "t2",
+        name: "Priya M.",
+        rating: 5,
+        text: {
+            en: "The studio felt like a spa. Marcus walked me through every step. Lip blush — obsessed.",
+            es: "El estudio se sintió como un spa. Marcus me explicó cada paso. Lip blush — obsesionada.",
+        },
+    },
+    {
+        id: "t3",
+        name: "Jess D.",
+        rating: 5,
+        text: {
+            en: "Sasha gave me the most natural microblading I've ever seen. People can't tell — they just say I look 'rested'.",
+            es: "Sasha me hizo el microblading más natural que he visto. Nadie nota — solo dicen que me veo 'descansada'.",
+        },
+    },
 ];

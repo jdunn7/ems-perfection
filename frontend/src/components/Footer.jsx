@@ -1,5 +1,5 @@
 import React from "react";
-import { Instagram, Facebook, Youtube, Heart } from "lucide-react";
+import { Instagram, Facebook, Heart, MapPin } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { BRAND_LOGO_URL } from "@/data/content";
 
@@ -26,6 +26,9 @@ const Footer = () => {
                             <span className="font-heading text-3xl">BrowsEMS</span>
                         </div>
                         <p className="font-body text-background/70 text-sm max-w-xs">{f.tagline}</p>
+                        <p className="font-body text-background/60 text-xs mt-4 flex items-center gap-1.5">
+                            <MapPin size={12} /> Boca Raton · Fort Lauderdale · Miami
+                        </p>
                         <div className="mt-6 flex items-center gap-3">
                             <a
                                 href="#"
@@ -43,26 +46,36 @@ const Footer = () => {
                             >
                                 <Facebook size={16} />
                             </a>
-                            <a
-                                href="#"
-                                aria-label="YouTube"
-                                data-testid="footer-youtube"
-                                className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent flex items-center justify-center transition-colors"
-                            >
-                                <Youtube size={16} />
-                            </a>
                         </div>
                     </div>
 
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-3">
                         <h4 className="font-body text-xs tracking-[0.3em] uppercase text-background/60 mb-4">
-                            {f.shop}
+                            {f.services}
                         </h4>
                         <ul className="space-y-2">
-                            {f.links.shop.map((l) => (
+                            {f.links.services.map((l) => (
                                 <li key={l}>
                                     <a
-                                        href="#best-sellers"
+                                        href="/#services"
+                                        className="font-body text-sm text-background/85 hover:text-accent transition-colors"
+                                    >
+                                        {l}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="md:col-span-3">
+                        <h4 className="font-body text-xs tracking-[0.3em] uppercase text-background/60 mb-4">
+                            {f.studio}
+                        </h4>
+                        <ul className="space-y-2">
+                            {f.links.studio.map((l) => (
+                                <li key={l}>
+                                    <a
+                                        href="/#artists"
                                         className="font-body text-sm text-background/85 hover:text-accent transition-colors"
                                     >
                                         {l}
@@ -80,7 +93,7 @@ const Footer = () => {
                             {f.links.help.map((l) => (
                                 <li key={l}>
                                     <a
-                                        href="#contact"
+                                        href="/#contact"
                                         className="font-body text-sm text-background/85 hover:text-accent transition-colors"
                                     >
                                         {l}
@@ -88,40 +101,14 @@ const Footer = () => {
                                 </li>
                             ))}
                         </ul>
-                    </div>
-
-                    <div className="md:col-span-2">
-                        <h4 className="font-body text-xs tracking-[0.3em] uppercase text-background/60 mb-4">
-                            {f.company}
-                        </h4>
-                        <ul className="space-y-2">
-                            {f.links.company.map((l) => (
-                                <li key={l}>
-                                    <a
-                                        href="#stories"
-                                        className="font-body text-sm text-background/85 hover:text-accent transition-colors"
-                                    >
-                                        {l}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="md:col-span-2">
-                        <h4 className="font-body text-xs tracking-[0.3em] uppercase text-background/60 mb-4">
-                            {f.badge.split("·")[0].trim()}
-                        </h4>
-                        <p className="font-body text-sm text-background/85 leading-relaxed">
-                            {f.badge}
-                        </p>
                     </div>
                 </div>
 
                 <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="font-body text-xs text-background/60">{f.rights}</p>
+                    <p className="font-body text-xs text-background/60 text-center">{f.badge}</p>
                     <p className="font-body text-xs text-background/60 flex items-center gap-1.5">
-                        Made with <Heart size={12} className="text-accent fill-accent" /> for everyday princesses
+                        Made with <Heart size={12} className="text-accent fill-accent" /> in South Florida
                     </p>
                 </div>
             </div>

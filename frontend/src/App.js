@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import Home from "@/pages/Home";
+import BookingSuccess from "@/pages/BookingSuccess";
+import BookingCancel from "@/pages/BookingCancel";
 
 function App() {
     return (
@@ -11,6 +13,8 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/booking-success" element={<BookingSuccess />} />
+                        <Route path="/booking-cancel" element={<BookingCancel />} />
                     </Routes>
                 </BrowserRouter>
                 <Toaster

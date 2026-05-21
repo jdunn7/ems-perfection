@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Calendar } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { HERO_VIDEO_URL, HERO_POSTER_URL } from "@/data/content";
+import { HERO_VIDEO_PATH, HERO_POSTER_URL } from "@/data/content";
 
-// Detect mobile / reduced-motion at module load so SSR-safety is fine (component is client-only in CRA).
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const VIDEO_SRC = `${BACKEND_URL}${HERO_VIDEO_PATH}`;
+
 const detectEnv = () => {
-    if (typeof window === "undefined") {
-        return { reducedMotion: false, isMobile: false, isiOS: false };
-    }
+    if (typeof window === "undefined") return { reducedMotion: false, isMobile: false, isiOS: false };
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const ua = window.navigator.userAgent || "";
     const isiOS = /iPhone|iPad|iPod/i.test(ua);
@@ -20,14 +20,14 @@ const ScrollVideoHero = () => {
     const containerRef = useRef(null);
     const videoRef = useRef(null);
 
-    const [progress, setProgress] = useState(0); // 0..1
+    const [progress, setProgress] = useState(0);
     const [env] = useState(detectEnv);
     const [videoReady, setVideoReady] = useState(false);
-    const [duration, setDuration] = useState(0);
+    const [videoFailed, setVideoFailed] = useState(false);
 
     const useScrub = !env.reducedMotion && !env.isMobile;
 
-    // rAF-driven scrub loop. Uses target/current lerp for smoothness.
+    // rAF scrub loop
     useEffect(() => {
         if (!useScrub) return;
         const video = videoRef.current;
@@ -51,15 +51,11 @@ const ScrollVideoHero = () => {
         };
 
         const tick = () => {
-            // ease toward target
             current += (target - current) * 0.16;
             if (Math.abs(target - current) < 0.0005) current = target;
-
             setProgress(current);
-
             if (video.readyState >= 1 && video.duration && isFinite(video.duration)) {
                 const t = current * video.duration;
-                // Avoid micro-thrashing
                 if (Math.abs(video.currentTime - t) > 0.04) {
                     try {
                         video.currentTime = t;
@@ -83,12 +79,10 @@ const ScrollVideoHero = () => {
         };
     }, [useScrub, videoReady]);
 
-    // Track progress on mobile too (for synced text), but DON'T touch video.currentTime there
     useEffect(() => {
         if (useScrub) return;
         const container = containerRef.current;
         if (!container) return;
-
         const onScroll = () => {
             const rect = container.getBoundingClientRect();
             const total = container.offsetHeight - window.innerHeight;
@@ -111,7 +105,6 @@ const ScrollVideoHero = () => {
     const handleLoaded = () => {
         const v = videoRef.current;
         if (v) {
-            setDuration(v.duration || 0);
             v.pause();
             try {
                 v.currentTime = 0.001;
@@ -122,23 +115,15 @@ const ScrollVideoHero = () => {
         }
     };
 
-    // Determine which text state is active (0,1,2) based on progress windows
-    const states = t.hero.states;
-    const getActive = (p) => {
-        // simple banding: 0-0.33 -> 0, 0.33-0.66 -> 1, 0.66-1 -> 2
-        if (p < 0.33) return 0;
-        if (p < 0.66) return 1;
-        return 2;
+    const handleError = () => {
+        setVideoFailed(true);
     };
-    const active = getActive(progress);
 
-    // For each state compute opacity for cross-fade feel
+    const states = t.hero.states;
     const stateOpacity = (i) => {
-        // peak window center: 0.165, 0.495, 0.825
         const centers = [0.16, 0.5, 0.84];
         const width = 0.22;
         const d = Math.abs(progress - centers[i]);
-        // ramp: full 1 within ~0.10 of center, fades to 0 at center+width
         const v = 1 - Math.max(0, (d - 0.08) / (width - 0.08));
         return Math.max(0, Math.min(1, v));
     };
@@ -148,15 +133,11 @@ const ScrollVideoHero = () => {
             id="top"
             ref={containerRef}
             data-testid="hero-section"
-            // The driver container: 300vh tall on desktop with scrubbing,
-            // 100vh on mobile / reduced-motion fallback (no scroll driver needed)
-            className={useScrub ? "relative w-full" : "relative w-full"}
+            className="relative w-full"
             style={{ height: useScrub ? "300vh" : "100vh" }}
         >
-            {/* Sticky video stage */}
             <div className="sticky top-0 h-screen w-full overflow-hidden bg-foreground">
-                {/* Video / fallback poster */}
-                {env.reducedMotion ? (
+                {env.reducedMotion || videoFailed ? (
                     <img
                         src={HERO_POSTER_URL}
                         alt="BrowsEMS hero"
@@ -167,7 +148,7 @@ const ScrollVideoHero = () => {
                     <video
                         ref={videoRef}
                         data-testid="hero-video"
-                        src={HERO_VIDEO_URL}
+                        src={VIDEO_SRC}
                         poster={HERO_POSTER_URL}
                         muted
                         playsInline
@@ -176,30 +157,28 @@ const ScrollVideoHero = () => {
                         autoPlay={!useScrub}
                         onLoadedMetadata={handleLoaded}
                         onCanPlay={handleLoaded}
+                        onError={handleError}
                         className="absolute inset-0 w-full h-full object-cover"
                     />
                 )}
 
-                {/* Soft gradient + vignette */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/15 to-black/55 pointer-events-none" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_30%,rgba(0,0,0,0.45)_100%)] pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/65 pointer-events-none" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_30%,rgba(0,0,0,0.5)_100%)] pointer-events-none" />
 
-                {/* Brand kicker top-left of hero (inside the stage, beneath nav) */}
                 <div className="absolute top-6 left-0 right-0 pointer-events-none">
                     <div className="container-x">
                         <span
                             data-testid="hero-kicker"
-                            className="font-body text-xs tracking-[0.3em] uppercase text-white/80"
+                            className="font-body text-xs tracking-[0.3em] uppercase text-white/85"
                         >
                             {t.hero.kicker}
                         </span>
                     </div>
                 </div>
 
-                {/* Text states */}
                 <div className="absolute inset-0 flex items-center pointer-events-none">
                     <div className="container-x w-full">
-                        <div className="max-w-2xl relative min-h-[260px] sm:min-h-[300px]">
+                        <div className="max-w-2xl relative min-h-[280px] sm:min-h-[320px]">
                             {states.map((s, i) => (
                                 <div
                                     key={i}
@@ -210,7 +189,7 @@ const ScrollVideoHero = () => {
                                     <span className="font-heading text-3xl sm:text-4xl text-white/90 leading-none mb-3">
                                         {s.eyebrow}
                                     </span>
-                                    <h1 className="font-body text-white text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.02] mb-4 drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]">
+                                    <h1 className="font-body text-white text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.02] mb-4 drop-shadow-[0_2px_24px_rgba(0,0,0,0.4)]">
                                         {s.title}
                                     </h1>
                                     <p className="font-body text-white/85 text-base sm:text-lg max-w-xl">
@@ -220,17 +199,25 @@ const ScrollVideoHero = () => {
                             ))}
                         </div>
 
-                        {/* CTA + scroll hint, anchored bottom */}
                         <div className="absolute left-0 right-0 bottom-10 container-x flex flex-wrap items-end justify-between gap-6 pointer-events-auto">
-                            <a
-                                href="#best-sellers"
-                                data-testid="hero-cta"
-                                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-foreground font-body font-medium text-sm transition-all duration-300 hover:bg-accent hover:text-white active:scale-[0.98]"
-                            >
-                                {t.hero.cta}
-                                <span className="inline-block w-5 h-px bg-current opacity-60" />
-                                <ArrowDown size={16} />
-                            </a>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <a
+                                    href="#booking"
+                                    data-testid="hero-cta"
+                                    className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-accent text-white font-body font-medium text-sm transition-all duration-300 hover:opacity-90 active:scale-[0.98]"
+                                >
+                                    <Calendar size={16} />
+                                    {t.hero.cta}
+                                </a>
+                                <a
+                                    href="#services"
+                                    data-testid="hero-secondary-cta"
+                                    className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/70 text-white font-body font-medium text-sm transition-all duration-300 hover:bg-white hover:text-foreground active:scale-[0.98]"
+                                >
+                                    {t.hero.secondaryCta}
+                                    <ArrowDown size={16} />
+                                </a>
+                            </div>
 
                             {useScrub && (
                                 <div className="hidden sm:flex items-center gap-3 text-white/70 text-xs font-body uppercase tracking-[0.25em]">
@@ -250,11 +237,8 @@ const ScrollVideoHero = () => {
                     </div>
                 </div>
 
-                {/* Decorative cursive wordmark — subtle, bottom-right */}
                 <div className="absolute bottom-6 right-6 hidden md:block pointer-events-none select-none">
-                    <span className="font-heading text-white/30 text-3xl">
-                        crowned glam
-                    </span>
+                    <span className="font-heading text-white/30 text-3xl">crafted by hand</span>
                 </div>
             </div>
         </section>

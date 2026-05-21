@@ -2,13 +2,16 @@ import React from "react";
 import PromoBanner from "@/components/PromoBanner";
 import Nav from "@/components/Nav";
 import ScrollVideoHero from "@/components/ScrollVideoHero";
-import BestSellers from "@/components/BestSellers";
+import Services from "@/components/Services";
 import TaglineRibbon from "@/components/TaglineRibbon";
-import ShopByCategory from "@/components/ShopByCategory";
-import FeaturedBanners from "@/components/FeaturedBanners";
-import Stories from "@/components/Stories";
-import InstagramFeed from "@/components/InstagramFeed";
-import Forms from "@/components/Forms";
+import Process from "@/components/Process";
+import Artists from "@/components/Artists";
+import BeforeAfter from "@/components/BeforeAfter";
+import Testimonials from "@/components/Testimonials";
+import FAQ from "@/components/FAQ";
+import BookingForm from "@/components/BookingForm";
+import Location from "@/components/Location";
+import NewsletterAndContact from "@/components/Forms";
 import Footer from "@/components/Footer";
 
 const Home = () => {
@@ -18,13 +21,16 @@ const Home = () => {
             <Nav />
             <main>
                 <ScrollVideoHero />
-                <BestSellers />
+                <Services />
                 <TaglineRibbon />
-                <ShopByCategory />
-                <FeaturedBanners />
-                <Stories />
-                <InstagramFeed />
-                <Forms />
+                <Process />
+                <Artists />
+                <BeforeAfter />
+                <Testimonials />
+                <FAQ />
+                <BookingForm />
+                <Location />
+                <NewsletterAndContact />
             </main>
             <Footer />
         </div>
